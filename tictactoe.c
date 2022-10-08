@@ -6,7 +6,7 @@
 int menuInput;
 
 // Long String Matrix
-char board[100];
+int board[3][3];
 int x;
 int y;
 
@@ -17,6 +17,7 @@ int getPlayerTurn();
 int isGameOver();
 void computerInput();
 void displayGameState();
+int isValid();
 
 int main()
 {
@@ -35,7 +36,7 @@ int main()
 	else
 		player = 0;
 
-	displayGameState(0, 0);
+	displayGameState(0, 0, 0);
 
 	int playerTurn = 1;
 	while (isGameOver() == 0)
@@ -47,9 +48,9 @@ int main()
 			getPlayerTurn(1);
 			computerInput();
 		}
-
-
+		displayGameState(x, y, playerTurn);
 	}
+
 
 	// print out the first game state via method in a while loop while getting input
 	// if pvc get random space and input in. check if the spot is open or not.
@@ -80,14 +81,15 @@ void displayMenu()
 
 void initBoard()
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 1; i < 4; i++)
 	{
 		printf("+-----------+\n");
-		for (int j = 0; j < 4; j++)
+		for (int j = 1; j < 4; j++)
 		{
 			printf(" | ");
+			board[i][j] = 0;
 		}
-		printf("\n");
+		printf("|\n");
 	}
 	printf("+-----------+\n");
 }
@@ -106,6 +108,8 @@ int getPlayerTurn(int pT)
 		scanf("%d %d", &x, &y);
 		if (isValid(x, y) == 1)
 			printf("\nGood!\n");
+		else
+			getPlayerTurn(1);
 		pT = 2;
 	}
 	else
@@ -114,16 +118,37 @@ int getPlayerTurn(int pT)
 		scanf("%d %d", &x, &y);
 		if (isValid(x, y) == 1)
 			printf("\nGood!\n");
+		else
+			getPlayerTurn(2);
 		pT = 1;
 	}
 
 	return pT;
 }
-void displayGameState(int x, int y)
+void displayGameState(int x, int y, int player)
 {
-	for(int i = 0; i < x; i++) {
-
+	for (int i = 1; i < 4; i++)
+	{
+		printf("+-----------+\n");
+		for (int j = 1; j < 4; j++)
+		{
+			if (i == x && j == y)
+			{
+				if (player == 1)
+				{
+					printf("X");
+					board[i][j] = 1;
+				else if (player == 2)
+				{
+					printf("O");
+					board[i][j] = 2;
+				}
+			}
+			printf(" | ");
+		}
+		printf(" |\n");
 	}
+	printf("+-----------+\n");
 }
 
 void computerInput()
@@ -132,7 +157,7 @@ void computerInput()
 
 int isValid(int x, int y)
 {
-	if (x > 3 && y > 3)
+	if (x < 4 && y <= 4)
 		return 1;
 	else
 		return 0;
