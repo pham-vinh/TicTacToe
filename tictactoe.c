@@ -11,6 +11,7 @@ int board[3][3];
 int x;
 int y;
 
+
 // Declare Methods
 void displayMenu();
 int getPlayerTurn();
@@ -55,7 +56,6 @@ int main()
 		printBoard();
 	}
 
-
 	// if pvc get random space and input in. check if the spot is open or not.
 	// similar to pvp check if spot is open. Method here()
 	// in gameState method check if the game is over or not.
@@ -94,10 +94,10 @@ int getPlayerTurn(int pT)
 	{
 		printf("Player 1: make your move\n");
 		scanf("%d %d", &x, &y);
-		if (isValid(x, y) == 1) {
+		if (isValid(x, y) == 1)
+		{
 			x -= 1;
-			y -= 1; 
-			printf("\nGood!\n");
+			y -= 1;
 		}
 		else
 			getPlayerTurn(1);
@@ -107,10 +107,10 @@ int getPlayerTurn(int pT)
 	{
 		printf("Player 2: make your move\n");
 		scanf("%d %d", &x, &y);
-		if (isValid(x, y) == 1) {
+		if (isValid(x, y) == 1)
+		{
 			x -= 1;
 			y -= 1;
-			printf("\nGood!\n");
 		}
 		else
 			getPlayerTurn(2);
@@ -121,18 +121,35 @@ int getPlayerTurn(int pT)
 
 void setGameState(int x, int y, int player)
 {
-	if (player == 1)
-		board[x][y] = 1;
-	else if (player == 2)
-		board[x][y] = 2;
+	if (board[x][y] == 0)
+	{
+		if (player == 1)
+			board[x][y] = 1;
+		else if (player == 2)
+			board[x][y] = 2;
+		else
+		{
+			board[x][y] = 0;
+		}
+	}
+	else
+	{
+		printf("Invalid Input Please try again.\n");
+		player == 1 ? setGameState(x, y, getPlayerTurn(1)) : setGameState(x, y, getPlayerTurn(2));
+	
+		printBoard();
+	}
 }
 
-void printBoard() {
-	for (int i = 0; i < 3; i++) {
+void printBoard()
+{
+	for (int i = 0; i < 3; i++)
+	{
 		printf("+-----------+\n");
-		for (int j = 0; j < 3; j++) {
+		for (int j = 0; j < 3; j++)
+		{
 			printf(" | ");
-			
+
 			if (board[i][j] == 1)
 				printf("X");
 			else if (board[i][j] == 2)
@@ -151,7 +168,10 @@ void computerInput()
 int isValid(int x, int y)
 {
 	if ((x < 4 && x > 0) && (y < 4 && y > 0))
+	{
+		printf("\nGood!\n");
 		return 1;
+	}
 	else
 		return 0;
 }
