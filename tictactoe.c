@@ -97,6 +97,7 @@ int drawCheck()
 	return 0;
 }
 
+// Bug: didn't get the right input
 // method for displaying menu
 void displayMenu()
 {
@@ -114,6 +115,7 @@ void displayMenu()
 		printf("\nInvalid Choice Please Choose Again\n");
 }
 
+// Bug: not detecting the right areas
 int isGameOver()
 {
 
@@ -157,6 +159,8 @@ void winMessage(int player)
 		printf("Player 2 Wins!\n");
 	}
 }
+
+// Bug: giving the wrong coordinates and removed swap player turns in this method because it was messing up with the order
 // get coords and swap
 void getPlayerTurn(int pT)
 {
@@ -188,6 +192,7 @@ void getPlayerTurn(int pT)
 	}
 }
 
+// Bug:wasn't resetting the board so I added an else to reset the board
 void setGameState(int x, int y, int player)
 {
 	if (player == 1)
@@ -208,6 +213,7 @@ void setGameState(int x, int y, int player)
 	}
 }
 
+// Bug: did not print out the correct table/ coordinate issue
 void printBoard()
 {
 	for (int i = 0; i < 3; i++)
@@ -229,6 +235,7 @@ void printBoard()
 	printf("+-----------+\n");
 }
 
+// Bug: Didn't account for the computer's turn which caused checkDraw() to not work
 void computerInput()
 {
 	time_t t;
@@ -245,6 +252,7 @@ void computerInput()
 	printf("Computer: makes their move\n%d %d\n", x + 1, y + 1);
 }
 
+// Change: Decided to substract 1 from the coords to fix the issue with misalignment
 int isValid(int x, int y)
 {
 	if ((x < 4 && x > 0) && (y < 4 && y > 0))
