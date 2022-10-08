@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <stdbool.h>
 
 // boolean of either pvp or pvc
 int menuInput;
@@ -22,12 +21,12 @@ int maxTurns = 0;
 // Declare Methods
 void displayMenu();
 void getPlayerTurn();
-bool isGameOver();
+int isGameOver();
 void computerInput();
 void setGameState();
 int isValid();
 void printBoard();
-bool drawCheck();
+int drawCheck();
 void boardP();
 
 int main()
@@ -48,30 +47,36 @@ int main()
 
 	// print out the first game state via method in a while loop while getting input
 	setGameState(0, 0, 0);
+	printBoard();
 
-	while (!isGameOver())
+	while (isGameOver() == 0)
 	{
-		printBoard();
+
 		if (player == 1)
 			getPlayerTurn(playerTurn);
 		else
 		{
 			getPlayerTurn(1);
 			setGameState(x, y, 1);
-			computerInput(); // sets x and y randomly
-			playerTurn = 2;
+
+			if (drawCheck() == 0)
+			{
+				computerInput(); // sets x and y randomly
+			}
 		}
 		setGameState(x, y, playerTurn);
+		printBoard();
 	}
 
+	printf("Done");
 	return 0;
 }
 
-bool drawCheck()
+int drawCheck()
 {
 	if (maxTurns >= 9)
-		return true;
-	return false;
+		return 1;
+	return 0;
 }
 
 // method for displaying menu
@@ -91,12 +96,28 @@ void displayMenu()
 		printf("\nInvalid Choice Please Choose Again\n");
 }
 
-bool isGameOver()
+int isGameOver()
 {
-	if (drawCheck())
-		return true;
+	if (drawCheck() == 1)
+		return 1;
 
-	return false; // false
+	// Rows and Columns
+	
+	if ((board[0][0] != 0 && board[0][0] == board[0][1] && board[0][1] == board[0][2]) || (board[0][0] != 0 && board[0][0] == board[1][0] && board[1][0] == board[2][0])) {
+		return 1;
+	}
+	else if ((board[1][0] != 0 && board[1][0] == board[1][1] && board[1][1] == board[1][2]) || (board[0][1] != 0 && board[0][1] == board[1][1] && board[1][1] == board[2][1]))
+	{
+		return 1;
+	}
+	else if ((board[2][0] != 0 && board[2][0] == board[2][1] && board[2][1] == board[2][2]) || (board[0][2] != 0 && board[0][2] == board[1][2] && board[1][2] == board[2][2]))
+	{
+		return 1;
+	}
+
+	
+	
+	return 0; // false
 }
 
 // get coords and swap
@@ -110,6 +131,7 @@ void getPlayerTurn(int pT)
 		{
 			x -= 1;
 			y -= 1;
+			maxTurns++;
 		}
 		else
 			getPlayerTurn(1);
@@ -123,6 +145,7 @@ void getPlayerTurn(int pT)
 		{
 			x -= 1;
 			y -= 1;
+			maxTurns++;
 		}
 		else
 			getPlayerTurn(2);
@@ -134,12 +157,10 @@ void setGameState(int x, int y, int player)
 {
 	if (player == 1)
 	{
-		maxTurns++;
 		board[x][y] = 1;
 	}
 	else if (player == 2)
 	{
-		maxTurns++;
 		board[x][y] = 2;
 	}
 }
@@ -196,16 +217,4 @@ int isValid(int x, int y)
 	}
 	else
 		return 0;
-}
-
-void boardP()
-{
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			printf("%d (%d,%d)", board[i][j], i, j);
-		}
-		printf("       %d   %d  \n", x, y);
-	}
 }
