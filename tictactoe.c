@@ -12,7 +12,6 @@ int y;
 
 // Declare Methods
 void displayMenu();
-void initBoard();
 int getPlayerTurn();
 int isGameOver();
 void computerInput();
@@ -37,7 +36,7 @@ int main()
 		player = 0;
 
 	// print out the first game state via method in a while loop while getting input
-	displayGameState(0, 0, 0);
+	setGameState(0, 0, 0);
 
 	int playerTurn = 1;
 	while (isGameOver() == 0)
@@ -49,7 +48,7 @@ int main()
 			getPlayerTurn(1);
 			computerInput();
 		}
-		displayGameState(x, y, playerTurn);
+		setGameState(x, y, playerTurn);
 	}
 
 
@@ -79,20 +78,7 @@ void displayMenu()
 		printf("\nInvalid Choice Please Choose Again\n");
 }
 
-void initBoard()
-{
-	for (int i = 1; i < 4; i++)
-	{
-		printf("+-----------+\n");
-		for (int j = 1; j < 4; j++)
-		{
-			printf(" | ");
-			board[i-1][j-1] = 0;
-		}
-		printf("|\n");
-	}
-	printf("+-----------+\n");
-}
+
 
 int isGameOver()
 {
@@ -124,7 +110,7 @@ int getPlayerTurn(int pT)
 	}
 	return pT;
 }
-void displayGameState(int x, int y, int player)
+void setGameState(int x, int y, int player)
 {
 	for (int i = 1; i < 4; i++)
 	{
@@ -136,18 +122,9 @@ void displayGameState(int x, int y, int player)
 			{
 				
 				if (player == 1)
-				{
-
 					board[i-1][j-1] = 1;
-					if (board[i-1][j-1] == 1)
-						printf("X");
-				}
 				else if (player == 2)
-				{
 					board[i-1][j-1] = 2;
-					if (board[i-1][j-1] == 2)
-						printf("O");
-				}
 			}
 		}
 		printf(" |\n");
@@ -156,6 +133,9 @@ void displayGameState(int x, int y, int player)
 
 }
 
+void printBoard() {
+	
+}
 void computerInput()
 {
 }
