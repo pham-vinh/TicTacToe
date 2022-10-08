@@ -138,6 +138,7 @@ void displayGameState(int x, int y, int player)
 				{
 					printf("X");
 					board[i][j] = 1;
+				}
 				else if (player == 2)
 				{
 					printf("O");
