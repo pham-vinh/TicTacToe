@@ -30,12 +30,11 @@ int drawCheck();
 int isValid();
 int isGameOver();
 
-
 int main()
 {
 
-	int player; // 0 is false, 1 is true
-
+	int player;		  // 0 is false, 1 is true
+	char game = 'Y'; // Play Again
 	// get input on menu
 	displayMenu();
 	while (menuInput != 1 && menuInput != 2)
@@ -47,41 +46,44 @@ int main()
 	else
 		player = 0;
 
-	// print out the first game state via method in a while loop while getting input
-	setGameState(0, 0, 0);
-	printBoard();
 
-	while (isGameOver() == 0)
+	while (game == 'Y' || game == 'y')
 	{
-
-		if (player == 1)
-		{
-			getPlayerTurn(playerTurn);
-			setGameState(x, y, playerTurn);
-		}
-		else
-		{
-			getPlayerTurn(1);
-			setGameState(x, y, 1);
-
-			if (drawCheck() == 0)
-			{
-				computerInput(); // sets x and y randomly
-				setGameState(x, y, playerTurn);
-			}
-		}
+		// print out the first game state via method in a while loop while getting input
+		setGameState(0, 0, 0);
 		printBoard();
+
+		while (isGameOver() == 0)
+		{
+
+			if (player == 1)
+			{
+				getPlayerTurn(playerTurn);
+				setGameState(x, y, playerTurn);
+				if (playerTurn == 1)
+					playerTurn = 2;
+				else
+					playerTurn = 1;
+			}
+			else
+			{
+				getPlayerTurn(1);
+				setGameState(x, y, 1);
+
+				if (drawCheck() == 0)
+				{
+					computerInput(); // sets x and y randomly
+					setGameState(x, y, playerTurn);
+				}
+			}
+			printBoard();
+		}
+
+		printf("\nPlay Again? Y or N: \n");
+		fflush(stdout);
+		scanf("%c", &game);
 	}
 
-	char option[100];
-	printf("\nPlay Again? Y or N: \n");
-	gets(option);
-
-	if (puts(option) == 'Y' || puts(option) == 'y')
-	{
-		printf("wokr");
-		main();
-	}
 	return 0;
 }
 
@@ -118,20 +120,23 @@ int isGameOver()
 	// Rows and Columns
 	if ((board[0][0] != 0 && board[0][0] == board[0][1] && board[0][1] == board[0][2]) || (board[0][0] != 0 && board[0][0] == board[1][0] && board[1][0] == board[2][0]))
 	{
+		winMessage(board[0][0]);
 		return 1;
 	}
 	else if ((board[1][0] != 0 && board[1][0] == board[1][1] && board[1][1] == board[1][2]) || (board[0][1] != 0 && board[0][1] == board[1][1] && board[1][1] == board[2][1]))
 	{
+		winMessage(board[1][1]);
 		return 1;
 	}
 	else if ((board[2][0] != 0 && board[2][0] == board[2][1] && board[2][1] == board[2][2]) || (board[0][2] != 0 && board[0][2] == board[1][2] && board[1][2] == board[2][2]))
 	{
+		winMessage(board[2][2]);
 		return 1;
 	}
 	// Diagonals
 	else if ((board[0][0] != 0 && board[0][0] == board[1][1] && board[1][1] == board[2][2]) || (board[0][2] != 0 && board[0][2] == board[1][1] && board[1][1] == board[2][0]))
 	{
-
+		winMessage(board[1][1]);
 		return 1;
 	}
 	// Draw
@@ -141,14 +146,23 @@ int isGameOver()
 		return 0; // false
 }
 
-void winMessage(int player) {
-
+void winMessage(int player)
+{
+	if (player == 1)
+	{
+		printf("Player 1 Wins!\n");
+	}
+	else
+	{
+		printf("Player 2 Wins!\n");
+	}
 }
 // get coords and swap
 void getPlayerTurn(int pT)
 {
 	if (pT == 1)
 	{
+
 		printf("Player 1: make your move\n");
 		scanf("%d %d", &x, &y);
 		if (isValid(x, y) == 1)
@@ -159,10 +173,10 @@ void getPlayerTurn(int pT)
 		}
 		else
 			getPlayerTurn(1);
-		playerTurn = 2;
 	}
 	else
 	{
+
 		printf("Player 2: make your move\n");
 		scanf("%d %d", &x, &y);
 		if (isValid(x, y) == 1)
@@ -173,7 +187,6 @@ void getPlayerTurn(int pT)
 		}
 		else
 			getPlayerTurn(2);
-		playerTurn = 1;
 	}
 }
 
