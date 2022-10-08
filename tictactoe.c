@@ -33,22 +33,21 @@ int isGameOver();
 int main()
 {
 
-	int player;		  // 0 is false, 1 is true
-	char game = 'Y'; // Play Again
-	// get input on menu
-	displayMenu();
-	while (menuInput != 1 && menuInput != 2)
+	int player;	  // 0 is false, 1 is true
+	int game = 1; // Play Again
+				  // get input on menu
+	while (game == 1)
 	{
 		displayMenu();
-	}
-	if (menuInput == 1)
-		player = 1;
-	else
-		player = 0;
+		while (menuInput != 1 && menuInput != 2)
+		{
+			displayMenu();
+		}
+		if (menuInput == 1)
+			player = 1;
+		else
+			player = 0;
 
-
-	while (game == 'Y' || game == 'y')
-	{
 		// print out the first game state via method in a while loop while getting input
 		setGameState(0, 0, 0);
 		printBoard();
@@ -73,17 +72,18 @@ int main()
 				if (drawCheck() == 0)
 				{
 					computerInput(); // sets x and y randomly
-					setGameState(x, y, playerTurn);
+					setGameState(x, y, 2);
 				}
 			}
 			printBoard();
 		}
 
-		printf("\nPlay Again? Y or N: \n");
-		fflush(stdout);
-		scanf("%c", &game);
-	}
+		printf("\nPlay Again?\n1: Yes\n2: No\n");
+		scanf("%d", &game);
 
+		if (game == 2)
+			exit(0);
+	}
 	return 0;
 }
 
@@ -91,7 +91,7 @@ int drawCheck()
 {
 	if (maxTurns >= 9)
 	{
-		printf("Draw!");
+		printf("Draw!\n");
 		return 1;
 	}
 	return 0;
@@ -162,7 +162,6 @@ void getPlayerTurn(int pT)
 {
 	if (pT == 1)
 	{
-
 		printf("Player 1: make your move\n");
 		scanf("%d %d", &x, &y);
 		if (isValid(x, y) == 1)
@@ -176,7 +175,6 @@ void getPlayerTurn(int pT)
 	}
 	else
 	{
-
 		printf("Player 2: make your move\n");
 		scanf("%d %d", &x, &y);
 		if (isValid(x, y) == 1)
@@ -199,6 +197,14 @@ void setGameState(int x, int y, int player)
 	else if (player == 2)
 	{
 		board[x][y] = 2;
+	}
+	else {
+		// Resetting
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				board[i][j] = 0;
+			}
+		}
 	}
 }
 
