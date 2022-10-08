@@ -15,8 +15,9 @@ void displayMenu();
 int getPlayerTurn();
 int isGameOver();
 void computerInput();
-void displayGameState();
+void setGameState();
 int isValid();
+void printBoard();
 
 int main()
 {
@@ -49,6 +50,7 @@ int main()
 			computerInput();
 		}
 		setGameState(x, y, playerTurn);
+		printBoard();
 	}
 
 
@@ -114,10 +116,8 @@ void setGameState(int x, int y, int player)
 {
 	for (int i = 1; i < 4; i++)
 	{
-		printf("+-----------+\n");
 		for (int j = 1; j < 4; j++)
 		{
-			printf(" | ");
 			if (i == x && j == y)
 			{
 				
@@ -127,14 +127,25 @@ void setGameState(int x, int y, int player)
 					board[i-1][j-1] = 2;
 			}
 		}
-		printf(" |\n");
 	}
-	printf("+-----------+\n");
-
 }
 
 void printBoard() {
-	
+	for (int i = 0; i < 3; i++) {
+		printf("+-----------+\n");
+		for (int j = 0; j < 3; j++) {
+			printf(" | ");
+			
+			if (board[i][j] == 1)
+				printf("X");
+			else if (board[i][j] == 2)
+				printf("O");
+			else
+				printf(" ");
+		}
+		printf(" |\n");
+	}
+	printf("+-----------+\n");
 }
 void computerInput()
 {
