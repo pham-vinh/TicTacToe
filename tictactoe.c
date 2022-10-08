@@ -6,21 +6,29 @@
 // boolean of either pvp or pvc
 int menuInput;
 
+// Swapping between player 1 and 2
+int playerTurn = 1;
+
 // Long String Matrix
 int board[3][3];
+
+// Coords
 int x;
 int y;
 
+// Max Turns == 9
+int maxTurns = 0;
 
 // Declare Methods
 void displayMenu();
-int getPlayerTurn();
-int isGameOver();
+void getPlayerTurn();
+bool isGameOver();
 void computerInput();
 void setGameState();
 int isValid();
 void printBoard();
 bool drawCheck();
+void boardP();
 
 int main()
 {
@@ -40,29 +48,30 @@ int main()
 
 	// print out the first game state via method in a while loop while getting input
 	setGameState(0, 0, 0);
-	printBoard();
 
-	int playerTurn = 1;
-	while (isGameOver() == 0)
+	while (!isGameOver())
 	{
-		if (player == 1 || player == 2)
-			playerTurn = getPlayerTurn(playerTurn);
+		printBoard();
+		if (player == 1)
+			getPlayerTurn(playerTurn);
 		else
 		{
 			getPlayerTurn(1);
-			computerInput();
+			setGameState(x, y, 1);
+			computerInput(); // sets x and y randomly
+			playerTurn = 2;
 		}
 		setGameState(x, y, playerTurn);
-		printBoard();
 	}
 
-	// if pvc get random space and input in. check if the spot is open or not.
-	// similar to pvp check if spot is open. Method here()
-	// in gameState method check if the game is over or not.
-
-	// ***Make sure to document throughout methods***
-
 	return 0;
+}
+
+bool drawCheck()
+{
+	if (maxTurns >= 9)
+		return true;
+	return false;
 }
 
 // method for displaying menu
@@ -82,13 +91,16 @@ void displayMenu()
 		printf("\nInvalid Choice Please Choose Again\n");
 }
 
-int isGameOver()
+bool isGameOver()
 {
+	if (drawCheck())
+		return true;
 
-	return 0; // false
+	return false; // false
 }
 
-int getPlayerTurn(int pT)
+// get coords and swap
+void getPlayerTurn(int pT)
 {
 	if (pT == 1)
 	{
@@ -101,7 +113,7 @@ int getPlayerTurn(int pT)
 		}
 		else
 			getPlayerTurn(1);
-		pT = 2;
+		playerTurn = 2;
 	}
 	else
 	{
@@ -114,30 +126,21 @@ int getPlayerTurn(int pT)
 		}
 		else
 			getPlayerTurn(2);
-		pT = 1;
+		playerTurn = 1;
 	}
-	return pT;
 }
 
 void setGameState(int x, int y, int player)
 {
-	if (board[x][y] == 0)
+	if (player == 1)
 	{
-		if (player == 1)
-			board[x][y] = 1;
-		else if (player == 2)
-			board[x][y] = 2;
-		else
-		{
-			board[x][y] = 0;
-		}
+		maxTurns++;
+		board[x][y] = 1;
 	}
-	else
+	else if (player == 2)
 	{
-		printf("Invalid Input Please try again.\n");
-		player == 1 ? setGameState(x, y, getPlayerTurn(1)) : setGameState(x, y, getPlayerTurn(2));
-	
-		printBoard();
+		maxTurns++;
+		board[x][y] = 2;
 	}
 }
 
@@ -161,17 +164,48 @@ void printBoard()
 	}
 	printf("+-----------+\n");
 }
+
 void computerInput()
 {
+	time_t t;
+	srand((unsigned)time(&t));
+	x = rand() % 3;
+	y = rand() % 3;
+
+	while (board[x][y] != 0)
+	{
+		x = rand() % 3;
+		y = rand() % 3;
+	}
 }
 
 int isValid(int x, int y)
 {
 	if ((x < 4 && x > 0) && (y < 4 && y > 0))
 	{
-		printf("\nGood!\n");
+		int tempX = x - 1;
+		int tempY = y - 1;
+		if (board[tempX][tempY] == 0)
+			printf("\nGood!\n");
+		else
+		{
+			printf("\nInvalid Input Please try again.\n");
+			return 0;
+		}
 		return 1;
 	}
 	else
 		return 0;
+}
+
+void boardP()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			printf("%d (%d,%d)", board[i][j], i, j);
+		}
+		printf("       %d   %d  \n", x, y);
+	}
 }
