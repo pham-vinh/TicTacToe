@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 
 // boolean of either pvp or pvc
 int menuInput;
@@ -18,15 +19,15 @@ void computerInput();
 void setGameState();
 int isValid();
 void printBoard();
+bool drawCheck();
 
 int main()
 {
 
 	int player; // 0 is false, 1 is true
 
-	displayMenu();
-
 	// get input on menu
+	displayMenu();
 	while (menuInput != 1 && menuInput != 2)
 	{
 		displayMenu();
@@ -38,11 +39,12 @@ int main()
 
 	// print out the first game state via method in a while loop while getting input
 	setGameState(0, 0, 0);
+	printBoard();
 
 	int playerTurn = 1;
 	while (isGameOver() == 0)
 	{
-		if (player == 1)
+		if (player == 1 || player == 2)
 			playerTurn = getPlayerTurn(playerTurn);
 		else
 		{
@@ -80,8 +82,6 @@ void displayMenu()
 		printf("\nInvalid Choice Please Choose Again\n");
 }
 
-
-
 int isGameOver()
 {
 
@@ -94,8 +94,11 @@ int getPlayerTurn(int pT)
 	{
 		printf("Player 1: make your move\n");
 		scanf("%d %d", &x, &y);
-		if (isValid(x, y) == 1)
+		if (isValid(x, y) == 1) {
+			x -= 1;
+			y -= 1; 
 			printf("\nGood!\n");
+		}
 		else
 			getPlayerTurn(1);
 		pT = 2;
@@ -104,30 +107,24 @@ int getPlayerTurn(int pT)
 	{
 		printf("Player 2: make your move\n");
 		scanf("%d %d", &x, &y);
-		if (isValid(x, y) == 1)
+		if (isValid(x, y) == 1) {
+			x -= 1;
+			y -= 1;
 			printf("\nGood!\n");
+		}
 		else
 			getPlayerTurn(2);
 		pT = 1;
 	}
 	return pT;
 }
+
 void setGameState(int x, int y, int player)
 {
-	for (int i = 1; i < 4; i++)
-	{
-		for (int j = 1; j < 4; j++)
-		{
-			if (i == x && j == y)
-			{
-				
-				if (player == 1)
-					board[i-1][j-1] = 1;
-				else if (player == 2)
-					board[i-1][j-1] = 2;
-			}
-		}
-	}
+	if (player == 1)
+		board[x][y] = 1;
+	else if (player == 2)
+		board[x][y] = 2;
 }
 
 void printBoard() {
@@ -153,7 +150,7 @@ void computerInput()
 
 int isValid(int x, int y)
 {
-	if (x < 4 && y < 4)
+	if ((x < 4 && x > 0) && (y < 4 && y > 0))
 		return 1;
 	else
 		return 0;
