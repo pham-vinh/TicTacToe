@@ -20,14 +20,16 @@ int maxTurns = 0;
 
 // Declare Methods
 void displayMenu();
+void printBoard();
+void winMessage();
+
 void getPlayerTurn();
-int isGameOver();
 void computerInput();
 void setGameState();
-int isValid();
-void printBoard();
 int drawCheck();
-void boardP();
+int isValid();
+int isGameOver();
+
 
 int main()
 {
@@ -53,7 +55,10 @@ int main()
 	{
 
 		if (player == 1)
+		{
 			getPlayerTurn(playerTurn);
+			setGameState(x, y, playerTurn);
+		}
 		else
 		{
 			getPlayerTurn(1);
@@ -62,20 +67,31 @@ int main()
 			if (drawCheck() == 0)
 			{
 				computerInput(); // sets x and y randomly
+				setGameState(x, y, playerTurn);
 			}
 		}
-		setGameState(x, y, playerTurn);
 		printBoard();
 	}
 
-	printf("Done");
+	char option[100];
+	printf("\nPlay Again? Y or N: \n");
+	gets(option);
+
+	if (puts(option) == 'Y' || puts(option) == 'y')
+	{
+		printf("wokr");
+		main();
+	}
 	return 0;
 }
 
 int drawCheck()
 {
 	if (maxTurns >= 9)
+	{
+		printf("Draw!");
 		return 1;
+	}
 	return 0;
 }
 
@@ -98,24 +114,36 @@ void displayMenu()
 
 int isGameOver()
 {
-	if (drawCheck() == 1)
-		return 1;
 
 	// Rows and Columns
 	if ((board[0][0] != 0 && board[0][0] == board[0][1] && board[0][1] == board[0][2]) || (board[0][0] != 0 && board[0][0] == board[1][0] && board[1][0] == board[2][0]))
+	{
 		return 1;
+	}
 	else if ((board[1][0] != 0 && board[1][0] == board[1][1] && board[1][1] == board[1][2]) || (board[0][1] != 0 && board[0][1] == board[1][1] && board[1][1] == board[2][1]))
+	{
 		return 1;
+	}
 	else if ((board[2][0] != 0 && board[2][0] == board[2][1] && board[2][1] == board[2][2]) || (board[0][2] != 0 && board[0][2] == board[1][2] && board[1][2] == board[2][2]))
+	{
 		return 1;
-
+	}
 	// Diagonals
-	else if ((board[0][0] != 0 && board[0][0] == board[1][1] && board[2][2]) || (board[0][2] != 0 && board[0][2] == board[2][2] && board[2][2] == board[2][0]))
+	else if ((board[0][0] != 0 && board[0][0] == board[1][1] && board[1][1] == board[2][2]) || (board[0][2] != 0 && board[0][2] == board[1][1] && board[1][1] == board[2][0]))
+	{
+
+		return 1;
+	}
+	// Draw
+	else if (drawCheck() == 1)
 		return 1;
 	else
 		return 0; // false
 }
 
+void winMessage(int player) {
+
+}
 // get coords and swap
 void getPlayerTurn(int pT)
 {
@@ -194,6 +222,8 @@ void computerInput()
 		x = rand() % 3;
 		y = rand() % 3;
 	}
+	maxTurns++;
+	printf("Computer: makes their move\n%d %d\n", x + 1, y + 1);
 }
 
 int isValid(int x, int y)
