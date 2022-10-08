@@ -36,6 +36,7 @@ int main()
 	else
 		player = 0;
 
+	// print out the first game state via method in a while loop while getting input
 	displayGameState(0, 0, 0);
 
 	int playerTurn = 1;
@@ -52,7 +53,6 @@ int main()
 	}
 
 
-	// print out the first game state via method in a while loop while getting input
 	// if pvc get random space and input in. check if the spot is open or not.
 	// similar to pvp check if spot is open. Method here()
 	// in gameState method check if the game is over or not.
@@ -87,7 +87,7 @@ void initBoard()
 		for (int j = 1; j < 4; j++)
 		{
 			printf(" | ");
-			board[i][j] = 0;
+			board[i-1][j-1] = 0;
 		}
 		printf("|\n");
 	}
@@ -122,7 +122,6 @@ int getPlayerTurn(int pT)
 			getPlayerTurn(2);
 		pT = 1;
 	}
-
 	return pT;
 }
 void displayGameState(int x, int y, int player)
@@ -132,24 +131,29 @@ void displayGameState(int x, int y, int player)
 		printf("+-----------+\n");
 		for (int j = 1; j < 4; j++)
 		{
+			printf(" | ");
 			if (i == x && j == y)
 			{
+				
 				if (player == 1)
 				{
-					printf("X");
-					board[i][j] = 1;
+
+					board[i-1][j-1] = 1;
+					if (board[i-1][j-1] == 1)
+						printf("X");
 				}
 				else if (player == 2)
 				{
-					printf("O");
-					board[i][j] = 2;
+					board[i-1][j-1] = 2;
+					if (board[i-1][j-1] == 2)
+						printf("O");
 				}
 			}
-			printf(" | ");
 		}
 		printf(" |\n");
 	}
 	printf("+-----------+\n");
+
 }
 
 void computerInput()
@@ -158,7 +162,7 @@ void computerInput()
 
 int isValid(int x, int y)
 {
-	if (x < 4 && y <= 4)
+	if (x < 4 && y < 4)
 		return 1;
 	else
 		return 0;
